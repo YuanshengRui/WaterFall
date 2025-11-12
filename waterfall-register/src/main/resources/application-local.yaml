@@ -1,0 +1,29 @@
+spring:
+  application.name: waterfall-register
+  codec:
+    max-in-memory-size: 20MB
+  data:
+    mongodb:
+      uri: mongodb://user:pass@mongo:27017/center0?connectTimeoutMS=10000&authSource=test&minPoolSize=10&maxPoolSize=10&waitQueueMultiple=10
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            repository: DEBUG
+            core:
+              MongoTemplate: DEBUG
+
+#cloud:
+#  aws:
+#    stack:
+#      auto: false
+#    region:
+#      static: us-east-1
+#    credentials:
+#      access-key: **
+#      secret-key: **
+#    end-point:
+#      url: http://localstack:4566

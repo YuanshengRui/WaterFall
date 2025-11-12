@@ -1,0 +1,38 @@
+spring:
+  application.name: waterfall-register
+  codec:
+    max-in-memory-size: 20MB
+cloud:
+  aws:
+    region:
+      auto: false
+      static: us-west-2
+    stack:
+      auto: false
+management:
+  metrics:
+    export:
+      datadog:
+        enabled: false
+  data:
+    mongodb:
+      port: 27017
+  endpoints:
+    enabled-by-default: false
+    jmx:
+      exposure:
+        exclude: "*"
+  endpoint:
+    health:
+      enabled: true
+      probes:
+        enabled: true
+database:
+  id: 1
+server:
+  port: 9090
+  error:
+    includeMessage: ALWAYS
+
+
+
