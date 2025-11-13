@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.support.CronExpression;
 
 
@@ -27,12 +28,17 @@ import tech.waterfall.register.support.column.FutureTaskColumn;
 public class FutureTaskService implements IFutureTaskService {
     private FutureTaskDao futureTaskDao;
 
+    @Value("${scheduler.shard.total-count}")
+    private static final int SHARD_COUNT = 10;
+
+
     @Override
     public Mono<String> insert(FutureTask futureTask) {
         return Mono.justOrEmpty(futureTask)
                 .doOnNext(this::sanitize)
                 .doOnNext(this::calcFireTime)
                 .doOnNext(this::trySetTimeInfo)
+                .doOnNext(this::calcShard)
                 .flatMap(futureTaskDao::insertWithNextId);
     }
 
@@ -45,8 +51,16 @@ public class FutureTaskService implements IFutureTaskService {
                         futureTask.setLastModifiedTime(Instant.now());
                     }
                 })
+                .doOnNext(this::calcShard)
                 .flatMap(futureTaskDao::save);
     }
+     private void calcShard(FutureTask task) {
+         // 根据 taskName + taskId 计算分片索引（保证同一任务总在同一分片）
+         String shardKey = task.getTaskName() + ":" + task.getTaskId();
+         int shardIndex = Math.abs(shardKey.hashCode()) % SHARD_COUNT;
+         task.setShardIndex(shardIndex);
+
+     }
 
     @Override
     public Mono<Void> cancel(String taskName, String taskId) {

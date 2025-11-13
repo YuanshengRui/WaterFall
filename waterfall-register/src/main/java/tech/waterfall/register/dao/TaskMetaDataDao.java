@@ -12,6 +12,7 @@ import tech.waterfall.register.model.TaskMetaData;
 import tech.waterfall.register.support.column.TaskMetaDataColumn;
 
 import java.util.Collection;
+import static tech.waterfall.register.support.column.TaskMetaDataColumn.taskCategory;
 
 
 public class TaskMetaDataDao extends BaseDao<TaskMetaData, String> {

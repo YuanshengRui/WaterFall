@@ -17,10 +17,10 @@ public class TaskMetaDataWatcher {
     }
 
     public void start(Consumer<ChangeStreamEvent<TaskMetaData>> consumer) {
-        disposableWatcher = mongoTemplate.changeStream("taskMetaData",
-                ChangeStreamOptions.empty(),
-                TaskMetaData.class)
-                .subscribe(consumer);
+//        disposableWatcher = mongoTemplate.changeStream("taskMetaData",
+//                ChangeStreamOptions.empty(),
+//                TaskMetaData.class)
+//                .subscribe(consumer);
     }
 
     public void stop() {

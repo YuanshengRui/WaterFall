@@ -13,4 +13,6 @@ public class FutureTask extends TaskInfo {
     Instant fireTime;
     String timeZoneId;
     long triggerCount;
+    Integer shardIndex;  // 新增：分片索引 (0-9)
+
 }

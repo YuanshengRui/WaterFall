@@ -10,11 +10,13 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tech.waterfall.register.model.GenericTask;
 import tech.waterfall.register.support.TaskStatus;
+import tech.waterfall.register.support.column.BaseInfoColumn;
 import tech.waterfall.register.support.column.GenericTaskColumn;
 import tech.waterfall.register.support.column.TaskInfoColumn;
 
 import java.time.Instant;
 import java.util.Collection;
+
 
 public class GenericTaskDao extends TaskBaseDao<GenericTask> {
     public GenericTaskDao(ReactiveMongoTemplate mongoTemplate) {
@@ -30,14 +32,14 @@ public class GenericTaskDao extends TaskBaseDao<GenericTask> {
     }
 
     public Mono<Void> updateStatus(String id, TaskStatus status) {
-        Criteria criteria = Criteria.where(BaseInfoColumn._id.name()).is(id);
+        Criteria criteria = Criteria.where(BaseInfoColumn.id.name()).is(id);
         Update update = Update.update(GenericTaskColumn.taskStatus.name(), status)
                 .currentDate(TaskInfoColumn.lastModifiedTime.name());
         return updateFirst(Query.query(criteria), update).then();
     }
 
     public Mono<Void> updateStatusAndRetries(String id, TaskStatus status, int retries) {
-        Criteria criteria = Criteria.where(BaseInfoColumn._id.name()).is(id);
+        Criteria criteria = Criteria.where(BaseInfoColumn.id.name()).is(id);
         Update update = Update.update(GenericTaskColumn.taskStatus.name(), status)
                 .set(GenericTaskColumn.retries.name(), retries)
                 .currentDate(TaskInfoColumn.lastModifiedTime.name());
@@ -96,7 +98,7 @@ public class GenericTaskDao extends TaskBaseDao<GenericTask> {
     }
 
     public Mono<GenericTask> findAndUpdateStatus(String id, TaskStatus taskStatus, boolean returnNew) {
-        Criteria criteria = Criteria.where(BaseInfoColumn._id.name()).is(id);
+        Criteria criteria = Criteria.where(BaseInfoColumn.id.name()).is(id);
         Update update = Update.update(GenericTaskColumn.taskStatus.name(), taskStatus)
                 .currentDate(TaskInfoColumn.lastModifiedTime.name());
         return mongoTemplate.findAndModify(Query.query(criteria), update,
@@ -106,7 +108,7 @@ public class GenericTaskDao extends TaskBaseDao<GenericTask> {
 
     public Mono<GenericTask> findAndUpdateStatus(String id, TaskStatus oldStatus,
             TaskStatus newStatus, boolean returnNew) {
-        Criteria criteria = Criteria.where(BaseInfoColumn._id.name()).is(id)
+        Criteria criteria = Criteria.where(BaseInfoColumn.id.name()).is(id)
                 .and(GenericTaskColumn.taskStatus.name()).is(oldStatus);
         Update update = Update.update(GenericTaskColumn.taskStatus.name(), newStatus)
                 .currentDate(TaskInfoColumn.lastModifiedTime.name());

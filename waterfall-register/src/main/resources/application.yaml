@@ -1,7 +1,14 @@
 spring:
-  application.name: waterfall-register
-  codec:
-    max-in-memory-size: 20MB
+    application.name: waterfall-register
+    codec:
+        max-in-memory-size: 20MB
+    data:
+        mongodb:
+            uri: mongodb://localhost:27017/core
+server:
+    port: 9098
+    error:
+        includeMessage: ALWAYS
 cloud:
   aws:
     region:
@@ -27,12 +34,6 @@ management:
       enabled: true
       probes:
         enabled: true
-database:
-  id: 1
-server:
-  port: 9090
-  error:
-    includeMessage: ALWAYS
 
 
 

@@ -3,7 +3,8 @@ package tech.waterfall.register.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.github.dockerjava.api.model.Task;
+import tech.waterfall.register.dto.Task;
+
 
 
 public class InvalidTaskException extends ResponseStatusException {

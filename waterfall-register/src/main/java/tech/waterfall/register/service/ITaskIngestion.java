@@ -5,6 +5,7 @@ import java.util.List;
 import reactor.core.publisher.Mono;
 import tech.waterfall.register.dto.IngestResult;
 import tech.waterfall.register.dto.Task;
+import tech.waterfall.register.dto.TaskUpdater;
 
 public interface ITaskIngestion {
     Mono<String> ingest(Task task);

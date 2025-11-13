@@ -1,5 +1,7 @@
 package tech.waterfall.register.support.column;
 
-public enum IdColumn implements IColumn {
+import tech.waterfall.register.model.EnumBase;
+
+public enum IdColumn implements EnumBase {
     _id
 }

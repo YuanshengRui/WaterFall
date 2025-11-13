@@ -3,7 +3,7 @@ package tech.waterfall.register.model;
 import lombok.Data;
 
 @Data
-public class TaskMetaData {
+public class TaskMetaData implements IIdentity<String> {
     String id;
     String taskCategory;
     String taskName;

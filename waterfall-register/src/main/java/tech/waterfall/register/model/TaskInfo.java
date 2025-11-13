@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.Map;
 
 @Data
-public class TaskInfo {
+public class TaskInfo implements IIdentity<String> {
     private String id;
     private String taskName;
     private String taskId;

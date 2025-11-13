@@ -4,7 +4,11 @@ spring:
     max-in-memory-size: 20MB
   data:
     mongodb:
-      uri: mongodb://user:pass@mongo:27017/center0?connectTimeoutMS=10000&authSource=test&minPoolSize=10&maxPoolSize=10&waitQueueMultiple=10
+      uri: mongodb://localhost:27017/test
+server:
+    port: 9098
+    error:
+        includeMessage: ALWAYS
 
 logging:
   level:

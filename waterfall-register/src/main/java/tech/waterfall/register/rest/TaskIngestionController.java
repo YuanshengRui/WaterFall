@@ -1,8 +1,10 @@
 package tech.waterfall.register.rest;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,10 +22,14 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
+import tech.waterfall.register.dto.GenericTask;
 import tech.waterfall.register.dto.IngestResult;
 import tech.waterfall.register.dto.Task;
 import tech.waterfall.register.dto.TaskUpdater;
+import tech.waterfall.register.exception.BaseException;
 import tech.waterfall.register.service.ITaskIngestion;
+import tech.waterfall.register.support.column.BaseInfoColumn;
+import tech.waterfall.register.support.column.TaskMetaDataColumn;
 
 @RestController
 @RequestMapping(value = "{version}/tasks")
@@ -38,6 +44,22 @@ public class TaskIngestionController {
     public Mono<Task> findFutureTask(@PathVariable("taskName") String taskName,
             @PathVariable("taskId") String taskId) {
         return taskIngestion.findFutureTask(taskName, taskId);
+    }
+
+    @PostMapping("/process")
+    public void callback(@RequestBody GenericTask genericTask) {
+        log.info("Received a task framework callback: {}", genericTask);
+        try {
+            Map<String, Object> rawData = genericTask.getTaskRawData();
+            Long orgId = (Long) rawData.get(BaseInfoColumn.organizationId.getName());
+            if (orgId == null) {
+                log.info("Received a task framework callback without a task ID or organization ID");
+                return;
+            }
+        } catch (Exception e) {
+            log.error("Failed to consume the task", e);
+            throw new BaseException("Failed to log the task framework callback", e);
+        }
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
